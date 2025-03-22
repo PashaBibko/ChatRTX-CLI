@@ -12,10 +12,11 @@ How to use:
 - Run run.bat (you may need to run as admin for the first time)
 - Wait for the model to be intitalised
 - Enter your query when asked
-- CTRL+C to stop
+- CTRL + C to stop
 
 # Commands
 
 | Command | Use |
 | ------- | --- |
 | CTRL + C | Stop |
+| CTRL + R | Restarts the process |

@@ -1,5 +1,6 @@
-print("Importing...")
+print("Importing libraries...")
 
+import subprocess
 import msvcrt
 import sys
 import os
@@ -24,8 +25,8 @@ def GetPromptFromUser():
 
             # Checks for commands
             match keyID:
-                # case 18: # CTRL + R
-                    # os.execv(sys.executable, [sys.executable] + sys.argv)
+                case 18: # CTRL + R
+                    os._exit(1) # Tells the batch file to restart the process
 
                 case 13: # Enter
                     print()
