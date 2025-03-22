@@ -13,11 +13,16 @@ from backend import Backend, Mode
 print("Initialsing...")
 
 def GetPromptFromUser():
+    # Simulates input() function
     print("Query: ", end = "", flush = True)
+    
+    # Initialises local variables
     query = ""
+    length = 0
 
     # Gets keypresses from the console
     while True:
+        # Checks if a key on the keyboard has been pressed
         if msvcrt.kbhit():
             # Decodes the key and gets the ASCII value
             key = msvcrt.getch().decode("utf-8")[0]
@@ -33,6 +38,12 @@ def GetPromptFromUser():
                     return query
 
                 case 8: # Backspace
+                    # Checks it does not remove from ordinary console output
+                    if length == 0:
+                        continue
+
+                    length = length - 1
+
                     # Removes last char from console
                     print("\b \b", end = "", flush = True)
 
@@ -42,6 +53,9 @@ def GetPromptFromUser():
                     pass
 
                 case _: # Default case
+                    length = length + 1 # Updates the length
+
+                    # Adds the key to the string and displays to the screen
                     query = query + key
                     print(key, end = "", flush = True)
 
