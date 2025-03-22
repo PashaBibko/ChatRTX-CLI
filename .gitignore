@@ -1,0 +1,7 @@
+# VS items #
+.vs/
+*.sln
+*.pyproj
+
+# Python cache folder #
+__pycache__
