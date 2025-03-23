@@ -9,14 +9,17 @@ import time
 import sys
 import os
 
+if os.name != "nt":
+    print(f"OS: {os.name} is not currently supported.")
+    print("Please read Non-Windows-Usage.md to find out how to run this project on your OS")
+
+# OS-Specific file paths
+PYTHON_FILES_DIRECTORY = "C:\\Program Files\\NVIDIA Corporation\\ChatRTX\\RAG\\trt-llm-rag-windows-ChatRTX_0.4.0\\ChatRTXUI\\engine"
+MODELS_DIRECTORY = "C:\\ProgramData\\NVIDIA Corporation\\ChatRTX"
+
 # Adds the ChatRTX engine dir to system path for importing from
 # Sys path is reset after program closes so does not change it permanently
-if os.name == "nt":
-    sys.path.append("C:\\Program Files\\NVIDIA Corporation\\ChatRTX\\RAG\\trt-llm-rag-windows-ChatRTX_0.4.0\\ChatRTXUI\\engine")
-
-else:
-    print(f"OS: {os.name}. Is not currently supported.")
-    print("Please make a Github Issue with the correct file directories if you are able to locate the needed files")
+sys.path.append(PYTHON_FILES_DIRECTORY)
 
 # Imports the needed files from ChatRTX
 from configuration import Configuration
@@ -119,7 +122,7 @@ def GetPromptFromUser():
 
 def ChatRTX_CLI_Init():
     # Starts the LLM
-    model = Backend(model_setup_dir = "C:\\ProgramData\\NVIDIA Corporation\\ChatRTX")
+    model = Backend(model_setup_dir = MODELS_DIRECTORY)
     model.init_model(model_id = "mistral_7b_AWQ_int4_chat")
 
     # Sets the state of the model [AI or RAG]
