@@ -9,6 +9,6 @@ REM Lable for start of loop
 	"C:\\Program Files\\NVIDIA Corporation\\ChatRTX\\env_nvd_rag\\Scripts\\python.exe" CLI.py
 
 	REM Checks if it returned restart exit code
-	if %ERRORLEVEL% == 1 (
+	if %ERRORLEVEL% == 201 (
 		goto loop
 	)
