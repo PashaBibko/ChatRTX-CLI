@@ -13,9 +13,11 @@ if os.name != "nt":
     os._exit(2)
 
 import random
-import msvcrt
 import time
 import sys
+import os
+
+from Input import *
 
 # OS-Specific file paths
 PYTHON_FILES_DIRECTORY = "C:\\Program Files\\NVIDIA Corporation\\ChatRTX\\RAG\\trt-llm-rag-windows-ChatRTX_0.4.0\\ChatRTXUI\\engine"
@@ -26,109 +28,8 @@ MODELS_DIRECTORY = "C:\\ProgramData\\NVIDIA Corporation\\ChatRTX"
 sys.path.append(PYTHON_FILES_DIRECTORY)
 
 # Imports the needed files from ChatRTX
-from configuration import Configuration
-from backend import Backend, Mode
-
-# Easier way to clear the console
-def ClearConsole():
-    os.system("cls" if os.name == "nt" else "clear") # Clears the console (non - os) specific
-
-# Custom user input function
-# Allows for commands like CTRL + R
-# Works like input()
-def GetPromptFromUser():
-    # Simulates input() function
-    print("Query: ", end = "", flush = True)
-    
-    # Initialises local variables
-    query = ""
-    length = 0
-    index = 0
-
-    # Gets keypresses from the console
-    while True:
-        # Checks if a key on the keyboard has been pressed
-        if msvcrt.kbhit():
-            # Gets the last key pressed
-            key = msvcrt.getch()
-
-            # Checks for the escape sequence
-            # This means it is a special key
-            if key == b'\xe0':
-                key = msvcrt.getch() # Gets the second byte in the sequence
-                keyID = ord(key) # Gets the numerical ID of the key
-
-                # Finds the correct logic for the key
-                match keyID:
-                    case 75:
-                        if index > 0:
-                            # Moves the cursor to the left (\x1b[1D) is a special operation in the console
-                            print("\x1b[1D", end = "", flush = True)
-                            index = index - 1 # Updates the index
-
-                    case 77:
-                        if index < length:
-                            # Moves the cursor to the right (\x1b[1C) is a special operation in the console
-                            print("\x1b[1C", end = "", flush = True)
-                            index = index + 1 # Updates the index
-
-                    case _:
-                        pass
-
-            # Less special keys
-            else:
-                # Gets the numerical ID of the key
-                keyID = ord(key)
-
-                # Checks for commands
-                # Else adds the character to the query
-                match keyID:
-                    case 18: # CTRL + R
-                        os._exit(201) # Tells the batch file to restart the process
-
-                    case 13: # Enter
-                        print()
-                        return query
-
-                    case 8: # Backspace
-                        # Checks it does not remove from ordinary console output
-                        if index == 0:
-                            continue
-
-                        length = length - 1
-                        index = index - 1
-
-                        # Removes the character from the query
-                        query = query[:index] + query[index + 1:]
-
-                        # Prints new query to the console
-                        print(f"\rQuery: {query} \x1b[1D", end = "", flush = False)
-
-                        # Puts the cursor back to where it was
-                        for i in range(length - index):
-                            print("\x1b[1D", end = "", flush = False)
-
-                        # Updates the console
-                        print("", end = "", flush = True)
-
-                    case _: # Default case
-                        length = length + 1 # Updates the length
-
-                        # Decodes the key
-                        key = key.decode("utf-8")[0]
-
-                        # Adds the key to the string and displays to the screen
-                        query = query[:index] + key + query[index:]
-                        print(f"\rQuery: {query}", end = "", flush = False)
-
-                        # Puts the cursor back to where it was
-                        for i in range((length - index) - 1):
-                            print("\x1b[1D", end = "", flush = False)
-
-                        # Updates the console
-                        print("", end = "", flush = True)
-
-                        index = index + 1 # Updates the index
+from configuration import Configuration # type: ignore
+from backend import Backend, Mode # type: ignore
 
 def ChatRTX_CLI_Init():
     # Starts the LLM
@@ -136,7 +37,7 @@ def ChatRTX_CLI_Init():
     model.init_model(model_id = "mistral_7b_AWQ_int4_chat")
 
     # Sets the state of the model [AI or RAG]
-    status = model.ChatRTX(chatrtx_mode = Mode.AI)
+    model.ChatRTX(chatrtx_mode = Mode.AI)
 
     # Returns the model so it can be used
     return model
@@ -149,6 +50,9 @@ def ChatRTX_CLI_Main():
         # Initialises the LLM and other resources
         model = ChatRTX_CLI_Init()
 
+        # Creates the Query input controller
+        user_input = QueryController()
+
         # Makes sure data is not cleared from the console without user knowing
         input("\nPress enter to the chat (Will clear the console): ")
         ClearConsole()
@@ -156,7 +60,7 @@ def ChatRTX_CLI_Main():
         # Main loop
         while True:
             # Gets answer from the LLM according to what the user inputted
-            prompt = GetPromptFromUser()
+            prompt = user_input.GetQueryFromUser()
             answer_stream = model.query_stream(query = prompt)
             
             # Makes it act as a single string
