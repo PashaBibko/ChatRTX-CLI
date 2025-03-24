@@ -11,9 +11,8 @@ This python program was developed using ChatRTX 0.4. If you are having issues wi
 # Run
 
 Prerequisites:
-1. Have ChatRTX installed on your computer. If you installed in a different location you can find out how to modify the files so you can run the application [here](Non-Windows-Usage.md)
-
-2. Be on a windows machine. Not on windows? Find out how to fix it [here](Non-Windows-Usage.md)
+1. Have ChatRTX installed on your computer in the default location. If not in the default location the file paths at the top of Main.py and the launch command in Run.bat will need updating.
+2. Be on windows as this project requires a variety of windows features to work.
 
 How to use:
 - Run run.bat (you may need to run as admin for the first time)
@@ -23,7 +22,7 @@ How to use:
 
 # Commands
 
-| Command | Use |
-| ------- | --- |
-| CTRL + C | Stop |
+| Command  | Use                  |
+| -------  | -------------------- |
+| CTRL + C | Stop                 |
 | CTRL + R | Restarts the program |
