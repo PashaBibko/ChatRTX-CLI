@@ -3,15 +3,19 @@
 if __name__ == "__main__":
     print(f"Running: {__file__}\nThe model can take some time to load...\n")
 
+# Checks the user's os to stop import errors
+import os
+
+# Quits if not on windows
+if os.name != "nt":
+    print(f"OS: {os.name} is not supported as this script requires windows-libraries and file paths.")
+    input("Press enter to exit: ")
+    os._exit(2)
+
 import random
 import msvcrt
 import time
 import sys
-import os
-
-if os.name != "nt":
-    print(f"OS: {os.name} is not currently supported.")
-    print("Please read Non-Windows-Usage.md to find out how to run this project on your OS")
 
 # OS-Specific file paths
 PYTHON_FILES_DIRECTORY = "C:\\Program Files\\NVIDIA Corporation\\ChatRTX\\RAG\\trt-llm-rag-windows-ChatRTX_0.4.0\\ChatRTXUI\\engine"
