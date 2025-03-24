@@ -63,9 +63,9 @@ def GetPromptFromUser():
                             index = index - 1 # Updates the index
 
                     case 77:
-                        if index + 1 < length:
-                            # Moves the cursor to the right (\x1b[1D) is a special operation in the console
-                            print("\x1b[1D", end = "", flush = True)
+                        if index < length:
+                            # Moves the cursor to the right (\x1b[1C) is a special operation in the console
+                            print("\x1b[1C", end = "", flush = True)
                             index = index + 1 # Updates the index
 
                     case _:
@@ -107,18 +107,24 @@ def GetPromptFromUser():
                         # Updates the console
                         print("", end = "", flush = True)
 
-                        pass
-
                     case _: # Default case
                         length = length + 1 # Updates the length
-                        index = index + 1 # Updates the index
 
                         # Decodes the key
                         key = key.decode("utf-8")[0]
 
                         # Adds the key to the string and displays to the screen
-                        query = query + key
-                        print(f"\rQuery: {query}", end = "", flush = True)
+                        query = query[:index] + key + query[index:]
+                        print(f"\rQuery: {query}", end = "", flush = False)
+
+                        # Puts the cursor back to where it was
+                        for i in range((length - index) - 1):
+                            print("\x1b[1D", end = "", flush = False)
+
+                        # Updates the console
+                        print("", end = "", flush = True)
+
+                        index = index + 1 # Updates the index
 
 def ChatRTX_CLI_Init():
     # Starts the LLM
