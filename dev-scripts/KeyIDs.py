@@ -12,7 +12,7 @@ try:
             keyID = ord(key)
 
             # Displays to the console
-            print(f"{key}:{keyID}")
+            print(f"Key pressed: {key}, ID: {keyID}")
 
 except KeyboardInterrupt:
     pass

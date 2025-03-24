@@ -86,12 +86,9 @@ def GetPromptFromUser():
                     case 18: # CTRL + R
                         os._exit(201) # Tells the batch file to restart the process
 
-                    case 10: # CTRL + ENTER
+                    case 13: # Enter
                         print()
                         return query
-
-                    case 4: # ENTER
-                        query = query + "\n"
 
                     case 8: # Backspace
                         # Checks it does not remove from ordinary console output
@@ -160,7 +157,6 @@ def ChatRTX_CLI_Main():
         while True:
             # Gets answer from the LLM according to what the user inputted
             prompt = GetPromptFromUser()
-            print(f"Prompt recived: {prompt}")
             answer_stream = model.query_stream(query = prompt)
             
             # Makes it act as a single string
